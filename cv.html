@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adan Fatima | CV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFC4C4;
+    --surface: #FCF5EE;
+    --ink: #850E35;
+    --ink-soft: rgba(133,14,53,0.62);
+    --white: #FCF5EE;
+    --black: #850E35;
+    --orange: #EE6983;
+    --line-strong: rgba(133,14,53,0.28);
+    --display: 'Archivo', sans-serif;
+    --body: 'Inter', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink); font-family: var(--body);
+    min-height: 100vh; padding: 2.5rem clamp(1.25rem, 5vw, 4rem);
+  }
+  a { text-decoration: none; color: inherit; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+  .page-title { font-family: var(--display); font-weight: 800; font-size: clamp(22px, 3vw, 30px); letter-spacing: -0.5px; }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .btn-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--body); font-weight: 600; font-size: 14px;
+    padding: 12px 22px; border-radius: 100px; cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s, border-color 0.3s, color 0.3s;
+    border: 1px solid transparent;
+  }
+  .btn-pill svg { width: 16px; height: 16px; }
+
+  .back-btn { background: var(--black); color: var(--white); }
+  .back-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(133,14,53,0.25); }
+
+  .download-btn { background: transparent; color: var(--ink); border-color: var(--line-strong); }
+  .download-btn:hover { transform: translateY(-2px); border-color: var(--orange); color: var(--orange); }
+
+  .cv-frame-wrap {
+    background: var(--surface);
+    border-radius: 22px;
+    padding: 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+    box-shadow: 0 30px 60px rgba(133,14,53,0.12);
+  }
+  .cv-frame { width: 100%; height: 85vh; border: none; border-radius: 14px; display: block; }
+
+  .fallback { text-align: center; padding: 4rem 1rem; color: var(--ink-soft); font-size: 14px; line-height: 1.7; }
+  .fallback a { color: var(--orange); font-weight: 600; text-decoration: underline; }
+
+  @media (max-width: 640px) { .cv-frame { height: 70vh; } }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <h1 class="page-title">Adan Fatima — CV</h1>
+    <div class="actions">
+      <a class="btn-pill download-btn" href="cv.pdf" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4v12"/></svg>
+        Download
+      </a>
+      <a class="btn-pill back-btn" href="index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6l6 6"/></svg>
+        Back to portfolio
+      </a>
+    </div>
+  </div>
+
+  <div class="cv-frame-wrap">
+    <object data="Adan's Resume.pdf" type="application/pdf" class="cv-frame">
+      <div class="fallback">
+        Your CV will preview here once <strong>cv.pdf</strong> is uploaded into this same folder.<br>
+        <a href="Adan's Resume.pdf">Click here to open it directly</a> once it's added.
+      </div>
+    </object>
+  </div>
+
+</body>
+</html>

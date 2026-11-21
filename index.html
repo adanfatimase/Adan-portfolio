@@ -428,6 +428,11 @@
   .send-circle:hover { background: var(--orange); border-color: var(--orange); color: var(--white); transform: scale(1.05); }
 
   footer { padding: 2.5rem 6vw; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--ink-soft); border-top: 1px solid var(--line); flex-wrap: wrap; gap: 8px; position: relative; z-index: 2; }
+
+.form-status { font-size: 13px; font-weight: 600; min-height: 18px; margin: 0; }
+.form-status.success { color: #1f8a4c; }
+.form-status.error { color: #c0243d; }
+.send-circle:disabled { opacity: 0.6; cursor: not-allowed; }
 </style>
 </head>
 <body>
@@ -670,29 +675,38 @@
     </div>
     <div class="contact-panel contact-right">
       <h2 class="contact-heading">We would like to meet you</h2>
-      <form class="contact-form" onsubmit="return false;">
-        <div class="form-group">
-          <label for="fname">Name</label>
-          <input type="text" id="fname" placeholder="Your name">
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="femail">Email</label>
-            <input type="email" id="femail" placeholder="you@email.com">
-          </div>
-          <div class="form-group">
-            <label for="fphone">Phone</label>
-            <input type="tel" id="fphone" placeholder="+92 3XX XXXXXXX">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="fmsg">Message</label>
-          <textarea id="fmsg" placeholder="Tell me about your project"></textarea>
-        </div>
-        <div class="send-row">
-          <button class="send-circle" type="submit">Send<svg class="icon" aria-hidden="true" style="margin-left:3px;"><use href="#icon-arrow-up-right"/></svg></button>
-        </div>
-      </form>
+      <form class="contact-form" id="contactForm">
+  <input type="hidden" name="access_key" value="144d7e27-dbf3-49f8-9d62-665c30949df4">
+  <input type="hidden" name="subject" value="New message from your portfolio">
+  <input type="hidden" name="from_name" value="Portfolio Contact Form">
+  <!-- spam trap: bots fill this, humans never see it -->
+  <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
+  <div class="form-group">
+    <label for="fname">Name</label>
+    <input type="text" id="fname" name="name" placeholder="Your name" required>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="femail">Email</label>
+      <input type="email" id="femail" name="email" placeholder="you@email.com" required>
+    </div>
+    <div class="form-group">
+      <label for="fphone">Phone</label>
+      <input type="tel" id="fphone" name="phone" placeholder="+92 3XX XXXXXXX">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="fmsg">Message</label>
+    <textarea id="fmsg" name="message" placeholder="Tell me about your project" required></textarea>
+  </div>
+
+  <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+
+  <div class="send-row">
+    <button class="send-circle" type="submit" id="sendBtn">Send<svg class="icon" aria-hidden="true" style="margin-left:3px;"><use href="#icon-arrow-up-right"/></svg></button>
+  </div>
+</form>
     </div>
   </div>
 </section>
@@ -742,6 +756,42 @@ handleNav();
   }
   window.addEventListener('scroll', updateProgress);
   updateProgress();
+
+  const contactForm = document.getElementById('contactForm');
+const formStatus = document.getElementById('formStatus');
+const sendBtn = document.getElementById('sendBtn');
+
+contactForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const originalBtn = sendBtn.innerHTML;
+  sendBtn.disabled = true;
+  sendBtn.textContent = '...';
+  formStatus.className = 'form-status';
+  formStatus.textContent = '';
+
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(new FormData(contactForm)))
+    });
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      formStatus.textContent = 'Thank you! Your message was sent. I\u2019ll reply within 24 hours.';
+      formStatus.classList.add('success');
+      contactForm.reset();
+    } else {
+      throw new Error(data.message || 'Something went wrong');
+    }
+  } catch (err) {
+    formStatus.textContent = 'Could not send. Please try again or email hello@adanfatima.com.';
+    formStatus.classList.add('error');
+  } finally {
+    sendBtn.disabled = false;
+    sendBtn.innerHTML = originalBtn;
+  }
+});
 </script>
 </body>
 </html>
